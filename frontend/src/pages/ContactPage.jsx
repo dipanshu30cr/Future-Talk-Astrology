@@ -4,6 +4,7 @@ import { useState } from "react"
 import styled from "styled-components"
 import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa"
 import { toast } from "react-toastify"
+import axios from "axios"
 
 const PageContainer = styled.div`
   padding: 2rem 0;
@@ -261,30 +262,72 @@ const ContactPage = () => {
     })
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault()
 
+  //   // Validate form
+  //   if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+  //     toast.error("Please fill all fields")
+  //     return
+  //   }
+
+  //   // Submit form
+  //   setSubmitting(true)
+
+  //   try {
+  //     console.log("form-data: ",formData)
+  //     const response = await axios.post("http://localhost:9000/api/contact/", formData)
+
+  //     toast.success(response.data.success || "Your message has been sent successfully!")
+
+  //     // Reset form
+  //     setFormData({
+  //       name: "",
+  //       email: "",
+  //       subject: "",
+  //       message: "",
+  //     })
+  //   } catch (error) {
+  //     console.error("Error sending message:", error)
+  //     toast.error(error.response?.data?.error || "Failed to send message. Please try again.")
+  //   } finally {
+  //     setSubmitting(false)
+  //   }
+  // }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
     // Validate form
     if (!formData.name || !formData.email || !formData.subject || !formData.message) {
-      toast.error("Please fill all fields")
-      return
+      toast.error("Please fill all fields");
+      return;
     }
-
+  
     // Submit form
-    setSubmitting(true)
-
-    // Simulate API call
-    setTimeout(() => {
-      toast.success("Your message has been sent successfully!")
+    setSubmitting(true);
+  
+    try {
+      console.log("form-data: ", formData);
+      const response = await axios.post("http://localhost:9000/api/contact/", formData);
+  
+      toast.success(response.data.success || "Your message has been sent successfully!");
+  
+      // Reset form
       setFormData({
         name: "",
         email: "",
         subject: "",
         message: "",
-      })
-      setSubmitting(false)
-    }, 1500)
-  }
+      });
+    } catch (error) {
+      console.error("Error sending message:", error);
+      toast.error(error.response?.data?.error || "Failed to send message. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+  
 
   return (
     <PageContainer>
@@ -361,9 +404,9 @@ const ContactPage = () => {
               <InfoContent>
                 <InfoLabel>Our Location</InfoLabel>
                 <InfoText>
-                  Kailash Nagar, Near Kailash Mandir
+                  123 Astrology Lane
                   <br />
-                  Ranchi, India 834001
+                  Cosmic City, Universe 54321
                 </InfoText>
               </InfoContent>
             </InfoItem>
@@ -374,7 +417,7 @@ const ContactPage = () => {
               </InfoIcon>
               <InfoContent>
                 <InfoLabel>Phone Number</InfoLabel>
-                <InfoText>+91 8102320370</InfoText>
+                <InfoText>+1 (555) 123-4567</InfoText>
               </InfoContent>
             </InfoItem>
 
@@ -384,7 +427,7 @@ const ContactPage = () => {
               </InfoIcon>
               <InfoContent>
                 <InfoLabel>Email Address</InfoLabel>
-                <InfoText>mdrax28@gmail.com</InfoText>
+                <InfoText>info@futuretalk.com</InfoText>
               </InfoContent>
             </InfoItem>
           </InfoList>
@@ -420,8 +463,6 @@ const ContactPage = () => {
           ></iframe>
         </MapFrame>
       </MapSection>
-
-
     </PageContainer>
   )
 }

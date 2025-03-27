@@ -414,8 +414,8 @@ const AstrologerListPage = () => {
                   <AstrologerRating>
                     <FaStar />
                     {/* <span>{astrologer.rating.toFixed(1)}</span> */}
-                    <span>{typeof astrologer.rating === 'number' ? astrologer.rating.toFixed(1) : 'N/A'}</span>
-
+                    {/* <span>{typeof astrologer.rating === 'number' ? astrologer.rating.toFixed(1) : 'N/A'}</span> */}
+                    <span>{Number(astrologer.rating).toFixed(1)}</span>
                     <span>({astrologer.reviews.length} reviews)</span>
                   </AstrologerRating>
                   <AstrologerInfo>

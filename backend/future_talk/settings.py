@@ -1,3 +1,5 @@
+
+
 import os
 from pathlib import Path
 from datetime import timedelta
@@ -63,7 +65,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'future_talk.wsgi.application'
 
-# Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -130,4 +131,14 @@ SIMPLE_JWT = {
 
 # CORS settings
 CORS_ALLOW_ALL_ORIGINS = True  # For development only, restrict in production
+
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'mdrax28@gmail.com'  # Replace with your Gmail address
+EMAIL_HOST_PASSWORD = 'khfdvfzzdfkhwatd'  # Replace with your app password generated above
+DEFAULT_FROM_EMAIL = 'FutureTalk <mdrax28@gmail.com>'
+
 

@@ -213,6 +213,7 @@ class ConversationView(APIView):
         return Response(serializer.data)
 
 class MessageView(APIView):
+    print("inside api view")
     permission_classes = [permissions.IsAuthenticated]
     
     def post(self, request, conversation_id):
@@ -226,6 +227,8 @@ class MessageView(APIView):
         serializer = MessageSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(conversation=conversation, sender=request.user)
+            print("response: ",serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

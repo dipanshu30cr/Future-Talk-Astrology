@@ -412,8 +412,8 @@ const Dashboard = () => {
           </StatIcon>
           <StatContent>
             {/* <StatValue>${stats.totalEarnings.toFixed(2)}</StatValue> */}
-            <StatValue>${typeof stats.totalEarnings === 'number' ? stats.totalEarnings.toFixed(2) : 'N/A'}</StatValue>
-
+            {/* <StatValue>${typeof stats.totalEarnings === 'number' ? stats.totalEarnings.toFixed(2) : 'N/A'}</StatValue> */}
+            <StatValue>${Number(stats.totalEarnings).toFixed(2)}</StatValue>
             <StatLabel>Total Earnings</StatLabel>
           </StatContent>
         </StatCard>

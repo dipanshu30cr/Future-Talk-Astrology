@@ -150,6 +150,118 @@ const NoConversation = styled.div`
   padding: 2rem;
 `;
 
+// const Chat = () => {
+//   const { bookingId } = useParams();
+//   const { user } = useAuth();
+//   const chatBodyRef = useRef(null);
+  
+//   const [booking, setBooking] = useState(null);
+//   const [conversation, setConversation] = useState(null);
+//   const [messages, setMessages] = useState([]);
+//   const [newMessage, setNewMessage] = useState('');
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+  
+//   useEffect(() => {
+//     const fetchBookingAndConversation = async () => {
+//       try {
+//         setLoading(true);
+        
+//         // Fetch booking details
+//         const bookingResponse = await axios.get(`http://localhost:9000/api/bookings/astrologer/${bookingId}/`);
+//         setBooking(bookingResponse.data);
+        
+//         // Fetch or create conversation
+//         const conversationResponse = await axios.get(`http://localhost:9000/api/bookings/conversation/${bookingId}/`);
+//         setConversation(conversationResponse.data);
+//         setMessages(conversationResponse.data.messages);
+        
+//         setLoading(false);
+//       } catch (err) {
+//         console.error('Error fetching data:', err);
+//         setError('Failed to load conversation');
+//         setLoading(false);
+//       }
+//     };
+    
+//     fetchBookingAndConversation();
+    
+//     // Set up polling for new messages
+//     const intervalId = setInterval(() => {
+//       if (conversation) {
+//         fetchNewMessages();
+//       }
+//     }, 5000);
+    
+//     return () => clearInterval(intervalId);
+//   }, [bookingId, conversation]);
+  
+//   const fetchNewMessages = async () => {
+//     try {
+//       const response = await axios.get(`http://localhost:9000/api/bookings/conversation/${bookingId}/`);
+//       setMessages(response.data.messages);
+//     } catch (err) {
+//       console.error('Error fetching new messages:', err);
+//     }
+//   };
+  
+//   useEffect(() => {
+//     // Scroll to bottom when messages change
+//     if (chatBodyRef.current) {
+//       chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+//     }
+//   }, [messages]);
+  
+//   const handleSendMessage = async (e) => {
+//     e.preventDefault();
+    
+//     if (!newMessage.trim()) return;
+    
+//     try {
+//       const response = await axios.post(`http://localhost:9000/api/bookings/conversation/${conversation.id}/messages/`, {
+//         content: newMessage
+//       });
+      
+//       // Add new message to the list
+//       setMessages([...messages, response.data]);
+      
+//       // Clear input
+//       setNewMessage('');
+//     } catch (err) {
+//       console.error('Error sending message:', err);
+//     }
+//   };
+  
+//   if (loading) {
+//     return <div>Loading conversation...</div>;
+//   }
+  
+//   if (error) {
+//     return <div>Error: {error}</div>;
+//   }
+  
+//   if (!booking) {
+//     return <div>Booking not found</div>;
+//   }
+  
+//   // Group messages by sender
+//   const groupedMessages = [];
+//   let currentGroup = null;
+  
+//   messages.forEach(message => {
+//     const isUser = message.sender === user.id;
+    
+//     if (!currentGroup || currentGroup.isUser !== isUser) {
+//       currentGroup = {
+//         isUser,
+//         messages: [message]
+//       };
+//       groupedMessages.push(currentGroup);
+//     } else {
+//       currentGroup.messages.push(message);
+//     }
+//   });
+  
 const Chat = () => {
   const { bookingId } = useParams();
   const { user } = useAuth();
@@ -161,21 +273,22 @@ const Chat = () => {
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
+  // Fetch booking and conversation data
   useEffect(() => {
     const fetchBookingAndConversation = async () => {
       try {
         setLoading(true);
-        
+
         // Fetch booking details
         const bookingResponse = await axios.get(`http://localhost:9000/api/bookings/astrologer/${bookingId}/`);
         setBooking(bookingResponse.data);
-        
+
         // Fetch or create conversation
         const conversationResponse = await axios.get(`http://localhost:9000/api/bookings/conversation/${bookingId}/`);
         setConversation(conversationResponse.data);
-        setMessages(conversationResponse.data.messages);
-        
+        setMessages(conversationResponse.data.messages); // Set messages data initially
+
         setLoading(false);
       } catch (err) {
         console.error('Error fetching data:', err);
@@ -183,85 +296,129 @@ const Chat = () => {
         setLoading(false);
       }
     };
-    
+
     fetchBookingAndConversation();
-    
-    // Set up polling for new messages
+  }, [bookingId]); // Fetch booking and conversation only on bookingId change
+
+  // Set up polling for new messages every 5 seconds
+  useEffect(() => {
     const intervalId = setInterval(() => {
       if (conversation) {
-        fetchNewMessages();
+        fetchNewMessages(); // Fetch new messages periodically
       }
     }, 5000);
-    
-    return () => clearInterval(intervalId);
-  }, [bookingId, conversation]);
-  
+
+    return () => clearInterval(intervalId); // Clean up the interval on unmount
+  }, [conversation]); // Only rely on conversation for polling
+
+  // Fetch new messages for conversation
   const fetchNewMessages = async () => {
     try {
       const response = await axios.get(`http://localhost:9000/api/bookings/conversation/${bookingId}/`);
-      setMessages(response.data.messages);
+      if (JSON.stringify(response.data.messages) !== JSON.stringify(messages)) {
+        setMessages(response.data.messages); // Only update if new messages are different
+      }
     } catch (err) {
       console.error('Error fetching new messages:', err);
     }
   };
-  
+
+  // Scroll to the bottom when messages change
   useEffect(() => {
-    // Scroll to bottom when messages change
     if (chatBodyRef.current) {
       chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
     }
-  }, [messages]);
-  
+  }, [messages]); // Scroll to bottom on message change
+
+  // Handle sending new messages
+  // const handleSendMessage = async (e) => {
+  //   e.preventDefault();
+
+  //   if (!newMessage.trim()) return;
+
+  //   try {
+  //     const response = await axios.post(`http://localhost:9000/api/bookings/conversation/${conversation.id}/messages/`, {
+  //       content: newMessage,
+  //     });
+
+  //     // Add new message to the list immediately
+  //     setMessages((prevMessages) => [...prevMessages, response.data]);
+
+  //     // Clear input
+  //     setNewMessage('');
+  //   } catch (err) {
+  //     console.error('Error sending message:', err);
+  //   }
+  // };
+
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    
+  
     if (!newMessage.trim()) return;
-    
+  
     try {
-      const response = await axios.post(`http://localhost:9000/api/bookings/conversation/${conversation.id}/messages/`, {
-        content: newMessage
-      });
+      console.log('Sending message:', newMessage);
+      console.log('Conversation ID:', conversation.id);
       
-      // Add new message to the list
-      setMessages([...messages, response.data]);
-      
+      // Prepare message data
+      const messageData = {
+        content: newMessage,
+        conversation: conversation.id,  // Include conversation ID
+        sender: user.id  // Include sender ID (assuming `user.id` is the sender)
+      };
+  
+      // Send message request
+      const response = await axios.post(`http://localhost:9000/api/bookings/conversation/${conversation.id}/messages/`, messageData);
+  
+      console.log('Message sent successfully:', response.data);
+  
+      // Add new message to the list immediately
+      setMessages((prevMessages) => [...prevMessages, response.data]);
+  
       // Clear input
       setNewMessage('');
     } catch (err) {
-      console.error('Error sending message:', err);
+      // Log detailed error info
+      console.error('Error sending message:', err.response ? err.response.data : err.message);
     }
   };
+
   
+
+
+  
+
   if (loading) {
     return <div>Loading conversation...</div>;
   }
-  
+
   if (error) {
     return <div>Error: {error}</div>;
   }
-  
+
   if (!booking) {
     return <div>Booking not found</div>;
   }
-  
+
   // Group messages by sender
   const groupedMessages = [];
   let currentGroup = null;
-  
+
   messages.forEach(message => {
     const isUser = message.sender === user.id;
-    
+
     if (!currentGroup || currentGroup.isUser !== isUser) {
       currentGroup = {
         isUser,
-        messages: [message]
+        messages: [message],
       };
       groupedMessages.push(currentGroup);
     } else {
       currentGroup.messages.push(message);
     }
   });
-  
+
+
   return (
     <ChatContainer>
       <BackLink to={`/astrologer/bookings/${bookingId}`}>

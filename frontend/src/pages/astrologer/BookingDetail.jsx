@@ -14,6 +14,8 @@ import {
   FaComments,
   FaCheckCircle,
   FaTimesCircle,
+  FaMapMarkerAlt,
+  FaVideo,
 } from "react-icons/fa"
 
 const PageContainer = styled.div`
@@ -404,6 +406,21 @@ const BookingDetail = () => {
             </PaymentStatusSection>
           )}
 
+          {booking.meeting_type === "PHYSICAL" && (
+            <PaymentStatusSection style={{ backgroundColor: "#E8F5E9" }}>
+              <PaymentStatusIcon>
+                <FaMapMarkerAlt />
+              </PaymentStatusIcon>
+              <PaymentStatusContent>
+                <PaymentStatusTitle>Physical Meeting</PaymentStatusTitle>
+                <PaymentStatusText>
+                  This is a physical meeting. The customer will visit you at Kailash Nagar Irgu Road, Near Kailash
+                  Mandir. Payment will be collected directly from the customer at the start of the session.
+                </PaymentStatusText>
+              </PaymentStatusContent>
+            </PaymentStatusSection>
+          )}
+
           <BookingSection>
             <SectionTitle>Booking Details</SectionTitle>
             <DetailsGrid>
@@ -440,12 +457,27 @@ const BookingDetail = () => {
               </DetailItem>
 
               <DetailItem>
+                <DetailIcon>{booking.meeting_type === "PHYSICAL" ? <FaMapMarkerAlt /> : <FaVideo />}</DetailIcon>
+                <DetailContent>
+                  <DetailLabel>Meeting Type</DetailLabel>
+                  <DetailValue>
+                    {booking.meeting_type === "PHYSICAL" ? "Physical Meeting" : "Online Meeting"}
+                    {booking.meeting_type === "PHYSICAL" && (
+                      <div style={{ fontSize: "0.8rem", color: "var(--light-text)", marginTop: "0.25rem" }}>
+                        Location: Kailash Nagar Irgu Road, Near Kailash Mandir
+                      </div>
+                    )}
+                  </DetailValue>
+                </DetailContent>
+              </DetailItem>
+
+              <DetailItem>
                 <DetailIcon>
                   <FaRupeeSign />
                 </DetailIcon>
                 <DetailContent>
                   <DetailLabel>Amount</DetailLabel>
-                  <DetailValue>${booking.amount}</DetailValue>
+                  <DetailValue>${Number(booking.amount).toFixed()}</DetailValue>
                 </DetailContent>
               </DetailItem>
             </DetailsGrid>
@@ -486,7 +518,7 @@ const BookingDetail = () => {
             <PaymentSection>
               <PaymentRow>
                 <PaymentLabel>Consultation Fee</PaymentLabel>
-                <PaymentValue>${booking.amount}</PaymentValue>
+                <PaymentValue>${Number(booking.amount).toFixed()}</PaymentValue>
               </PaymentRow>
               <PaymentRow>
                 <PaymentLabel>Platform Fee</PaymentLabel>
@@ -494,7 +526,7 @@ const BookingDetail = () => {
               </PaymentRow>
               <PaymentRow>
                 <PaymentLabel>Your Earnings</PaymentLabel>
-                <PaymentValue>${booking.amount}</PaymentValue>
+                <PaymentValue>${Number(booking.amount).toFixed()}</PaymentValue>
               </PaymentRow>
               {payment && (
                 <PaymentRow>

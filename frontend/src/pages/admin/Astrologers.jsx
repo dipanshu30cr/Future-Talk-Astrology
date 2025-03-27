@@ -422,7 +422,9 @@ const Astrologers = () => {
                   <TableCell>
                     <RatingDisplay>
                       <FaStar />
-                      <span>{typeof astrologer.rating === 'number' ? astrologer.rating.toFixed(1) : 'N/A'}</span>
+                      {/* <span>{typeof astrologer.rating === 'number' ? astrologer.rating.toFixed(1) : 'N/A'}</span> */}
+                      <span>{Number(astrologer.rating).toFixed(1)}</span>
+                      
 
                     </RatingDisplay>
                   </TableCell>

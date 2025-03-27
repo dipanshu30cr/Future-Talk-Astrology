@@ -436,8 +436,8 @@ const Dashboard = () => {
           </StatIcon>
           <StatContent>
             {/* <StatValue>${stats.totalSpent.toFixed(2)}</StatValue> */}
-            <StatValue>${typeof stats.totalSpent === 'number' ? stats.totalSpent.toFixed(2) : 'N/A'}</StatValue>
-
+            {/* <StatValue>${typeof stats.totalSpent === 'number' ? stats.totalSpent.toFixed(2) : 'N/A'}</StatValue> */}
+            <StatValue>${Number(stats.totalSpent).toFixed(2)}</StatValue>
             <StatLabel>Total Spent</StatLabel>
           </StatContent>
         </StatCard>
@@ -501,8 +501,8 @@ const Dashboard = () => {
                   <AstrologerRating>
                     <FaStar />
                     {/* <span>{astrologer.rating.toFixed(1)}</span> */}
-                    <span>{typeof astrologer.rating === 'number' ? astrologer.rating.toFixed(1) : 'N/A'}</span>
-
+                    {/* <span>{typeof astrologer.rating === 'number' ? astrologer.rating.toFixed(1) : 'N/A'}</span> */}
+                    <span>{Number(astrologer.rating).toFixed(1)}</span>
                     <span>({astrologer.reviews.length} reviews)</span>
                   </AstrologerRating>
                 </AstrologerInfo>

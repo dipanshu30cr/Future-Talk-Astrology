@@ -4,7 +4,7 @@ import { FaUserAstronaut, FaStar } from "react-icons/fa"
 import dipanshuImage from '../images/dipanshu.jpeg'
 import vivekImage from '../images/vivek.jpeg'
 import rahulImage from '../images/rahul.jpeg'
-//import dipanshuImage from '../images/dipanshu.jpeg'
+import nidhiImage from '../images/lady.jpeg'
 
 
 const HeroSection = styled.section`
@@ -484,7 +484,7 @@ const HomePage = () => {
                 <FaStar />
                 <FaStar />
                 <FaStar />
-                <span>5.0 (120 reviews)</span>
+                <span>3.2 (120 reviews)</span>
               </AstrologerRating>
               <AstrologerButton to="/astrologers/1">Book Now</AstrologerButton>
             </AstrologerInfo>
@@ -508,7 +508,7 @@ const HomePage = () => {
           </AstrologerCard>
 
           <AstrologerCard>
-            <AstrologerImage />
+            <AstrologerImage bgImage={nidhiImage} />
             <AstrologerInfo>
               <AstrologerName>Nidhi Gupta</AstrologerName>
               <AstrologerSpecialty>Tarot Reading, Vastu, Healing, Tarot Reading</AstrologerSpecialty>
